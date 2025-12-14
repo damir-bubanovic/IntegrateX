@@ -1,0 +1,32 @@
+# Core
+Django>=4.2,<5.0
+djangorestframework>=3.14
+
+# Authentication
+djangorestframework-simplejwt>=5.3
+
+# Environment variables
+python-dotenv>=1.0
+
+# Database
+psycopg2-binary>=2.9
+
+# Background jobs
+celery>=5.3
+redis>=5.0
+
+# HTTP / Third-party APIs
+requests>=2.31
+
+# Filtering & utilities
+django-filter>=23.3
+
+# CORS (optional but common for APIs)
+django-cors-headers>=4.3
+
+# Testing
+pytest>=7.4
+pytest-django>=4.7
+
+# API documentation
+drf-spectacular>=0.27
