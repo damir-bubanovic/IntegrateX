@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Local
-    "apps.users.apps.UsersConfig"
+    "apps.users.apps.UsersConfig",
+    "apps.organizations.apps.OrganizationsConfig",
 ]
 
 
