@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # Local
     "apps.users.apps.UsersConfig",
     "apps.organizations.apps.OrganizationsConfig",
+    "apps.integrations.apps.IntegrationsConfig",
 ]
 
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
 
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "apps.organizations.middleware.OrganizationMiddleware",
+
 
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
