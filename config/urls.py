@@ -19,4 +19,7 @@ urlpatterns = [
 
     # Organization endpoints
     path("api/v1/org/", include("apps.organizations.urls")),
+
+    path("api/v1/integrations/", include("apps.integrations.urls")),
+
 ]
