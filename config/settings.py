@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.organizations.apps.OrganizationsConfig",
     "apps.integrations.apps.IntegrationsConfig",
+    "apps.notifications.apps.NotificationsConfig",
+
 ]
 
 
@@ -105,3 +107,22 @@ USE_TZ = True
 
 
 
+
+
+# --- Celery / Redis ---
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", CELERY_BROKER_URL)
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = os.getenv("TIME_ZONE", "Europe/Zagreb")
+CELERY_TASK_ALWAYS_EAGER = os.getenv("CELERY_TASK_ALWAYS_EAGER", "0") == "1"  # helpful for tests/dev
+
+
+# --- Email (dev defaults) ---
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@integratex.local")
