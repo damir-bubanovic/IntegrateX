@@ -22,4 +22,7 @@ urlpatterns = [
 
     path("api/v1/integrations/", include("apps.integrations.urls")),
 
+    path("api/v1/audit/", include("apps.audit.urls")),
+
+
 ]

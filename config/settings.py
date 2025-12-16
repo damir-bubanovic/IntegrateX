@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "apps.organizations.apps.OrganizationsConfig",
     "apps.integrations.apps.IntegrationsConfig",
     "apps.notifications.apps.NotificationsConfig",
+    "apps.audit.apps.AuditConfig",
 
 ]
 
@@ -64,7 +65,7 @@ MIDDLEWARE = [
 
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "apps.organizations.middleware.OrganizationMiddleware",
-
+    "apps.audit.middleware.AuditMiddleware",
 
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
