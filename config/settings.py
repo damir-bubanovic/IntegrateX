@@ -83,7 +83,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # API / production auth (preferred)
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-
         # Browser / admin session support (dev-friendly)
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
@@ -94,6 +93,18 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
+    # --- Rate limiting (Chapter 11.2) ---
+    "DEFAULT_THROTTLE_CLASSES": (
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": os.getenv("DRF_THROTTLE_ANON", "100/day"),
+        "user": os.getenv("DRF_THROTTLE_USER", "1000/day"),
+        "burst": os.getenv("DRF_THROTTLE_BURST", "60/min"),
+        "webhook": os.getenv("DRF_THROTTLE_WEBHOOK", "300/hour"),
+    },
 }
 
 MIDDLEWARE = [

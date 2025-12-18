@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from apps.organizations.permissions import HasOrganization, IsOrgMember
@@ -37,6 +38,8 @@ class IntegrationListCreateView(APIView):
 
 class IntegrationPingView(APIView):
     permission_classes = [IsAuthenticated, HasOrganization, IsOrgMember]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "burst"
 
     # noinspection PyMethodMayBeStatic
     def post(self, request, integration_id: int):
@@ -63,7 +66,7 @@ class IntegrationPingView(APIView):
             {
                 "ok": ok,
                 "provider": integration.provider,
-                "integration": {"id": integration.id, "name": integration.name},
+                "integration": {"id": integration.pk, "name": integration.name},
                 "data": data,
             }
         )

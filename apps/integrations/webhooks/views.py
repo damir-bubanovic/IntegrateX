@@ -1,23 +1,24 @@
 import json
-from rest_framework.views import APIView
-from rest_framework.response import Response
+
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
-from apps.integrations.webhooks.serializers import WebhookEventSerializer, WebhookEventDetailSerializer
-
-
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.views import APIView
 
 from apps.integrations.models import Integration, WebhookEvent
-from apps.integrations.webhooks.validators import verify_signature
+from apps.integrations.webhooks.serializers import WebhookEventSerializer, WebhookEventDetailSerializer
 from apps.integrations.webhooks.tasks import process_webhook_event
+from apps.integrations.webhooks.validators import verify_signature
 
 SIGNATURE_HEADER = "HTTP_X_INTEGRATEX_SIGNATURE"
 
 
 class WebhookReceiveView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "webhook"
 
     @staticmethod
     def post(request, integration_id: int):
