@@ -81,11 +81,12 @@ AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        # API / production auth (preferred)
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+
         # Browser / admin session support (dev-friendly)
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
-        # API / production auth
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
@@ -115,6 +116,14 @@ CORS_ALLOW_ALL_ORIGINS = _env_bool(
     default=(DJANGO_ENV == "dev"),
 )
 CORS_ALLOWED_ORIGINS = _env_csv("CORS_ALLOWED_ORIGINS", default=[])
+
+# Never allow '*' CORS outside dev
+if DJANGO_ENV != "dev":
+    CORS_ALLOW_ALL_ORIGINS = False
+
+# CSRF
+CSRF_TRUSTED_ORIGINS = _env_csv("CSRF_TRUSTED_ORIGINS", default=[])
+CSRF_COOKIE_HTTPONLY = True
 
 # Templates
 TEMPLATES = [
