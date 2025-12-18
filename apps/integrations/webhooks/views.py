@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 from rest_framework import status
@@ -43,6 +44,17 @@ class WebhookReceiveView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Deterministic fingerprint for replay protection
+        fingerprint = hashlib.sha256(raw_body).hexdigest()
+
+        # If we already have this event for this integration, return idempotent OK and do not enqueue again
+        existing = WebhookEvent.objects.filter(integration=integration, fingerprint=fingerprint).first()
+        if existing:
+            return Response(
+                {"id": str(existing.id), "accepted": True, "replay": True},
+                status=status.HTTP_200_OK,
+            )
+
         secret = integration.webhook_secret or ""
         is_valid, _expected = verify_signature(secret=secret, body=raw_body, signature_header=signature)
 
@@ -67,6 +79,7 @@ class WebhookReceiveView(APIView):
 
         event = WebhookEvent.objects.create(
             integration=integration,
+            fingerprint=fingerprint,
             signature_header=signature,
             signature_valid=is_valid,
             headers={k: str(v) for k, v in request.headers.items()},
@@ -74,8 +87,6 @@ class WebhookReceiveView(APIView):
             raw_body=raw_body.decode("utf-8", errors="replace"),
         )
 
-        # Enqueue regardless of signature validity (processor can decide what to do),
-        # but we only accept well-formed requests.
         process_webhook_event.delay(str(event.id))
         return Response({"id": str(event.id), "accepted": True}, status=status.HTTP_202_ACCEPTED)
 

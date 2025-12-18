@@ -1,0 +1,3085 @@
+(.venv) devilmaycry@devilmaycry-MS-7B86:~/Websites/IntegrateX$ pytest -q
+EEEEEEEEEEEEEEEEEEEEEEEEEEEE..                                                                                                                         [100%]
+=========================================================================== ERRORS ===========================================================================
+____________________________________________________ ERROR at setup of test_integration_ping_api_success _____________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_integration_ping_api_success>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+___________________________________________ ERROR at setup of test_webhook_receive_creates_event_and_enqueues_task ___________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_receive_creates_event_and_enqueues_task>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+________________________________________________ ERROR at setup of test_webhook_missing_signature_returns_400 ________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_missing_signature_returns_400>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+__________________________________________________ ERROR at setup of test_webhook_invalid_json_returns_400 ___________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_invalid_json_returns_400>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_________________________________________________ ERROR at setup of test_webhook_non_object_json_returns_400 _________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_non_object_json_returns_400>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+________________________________________________ ERROR at setup of test_webhook_payload_too_large_returns_413 ________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_payload_too_large_returns_413>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+________________________________________ ERROR at setup of test_webhook_replay_returns_200_and_does_not_enqueue_twice ________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_webhook_replay_returns_200_and_does_not_enqueue_twice>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+___________________________________ ERROR at setup of TestOrganizationMiddleware.test_request_without_org_header_sets_none ___________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_request_without_org_header_sets_none>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+___________________________________ ERROR at setup of TestOrganizationMiddleware.test_valid_org_slug_resolves_organization ___________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_valid_org_slug_resolves_organization>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_______________________________________ ERROR at setup of TestOrganizationMiddleware.test_invalid_org_slug_returns_404 _______________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_invalid_org_slug_returns_404>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+____________________________________________________ ERROR at setup of test_organization_str_returns_name ____________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_organization_str_returns_name>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+__________________________________________________ ERROR at setup of test_membership_default_role_is_member __________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_membership_default_role_is_member>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_________________________________________________ ERROR at setup of test_membership_unique_together_user_org _________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_membership_unique_together_user_org>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+______________________________________________ ERROR at setup of test_membership_str_includes_user_org_and_role ______________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_membership_str_includes_user_org_and_role>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_______________________________________ ERROR at setup of TestOrganizationPermissions.test_current_requires_org_header _______________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_current_requires_org_header>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_____________________________________ ERROR at setup of TestOrganizationPermissions.test_current_rejects_user_not_in_org _____________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_current_rejects_user_not_in_org>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+__________________________________________ ERROR at setup of TestOrganizationPermissions.test_current_allows_member __________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_current_allows_member>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+___________________________________ ERROR at setup of TestOrganizationPermissions.test_admin_only_forbids_non_admin_member ___________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_admin_only_forbids_non_admin_member>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_______________________________________ ERROR at setup of TestOrganizationPermissions.test_admin_only_allows_org_admin _______________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_admin_only_allows_org_admin>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_________________________________ ERROR at setup of TestAuthAndRBAC.test_token_obtain_pair_returns_tokens_and_custom_claims __________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_token_obtain_pair_returns_tokens_and_custom_claims>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+__________________________________________________ ERROR at setup of TestAuthAndRBAC.test_me_requires_auth ___________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_me_requires_auth>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_____________________________________ ERROR at setup of TestAuthAndRBAC.test_me_returns_user_payload_when_authenticated ______________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_me_returns_user_payload_when_authenticated>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+______________________________________________ ERROR at setup of TestAuthAndRBAC.test_admin_only_requires_auth _______________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_admin_only_requires_auth>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+____________________________________________ ERROR at setup of TestAuthAndRBAC.test_admin_only_forbids_non_admin _____________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_admin_only_forbids_non_admin>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_______________________________________________ ERROR at setup of TestAuthAndRBAC.test_admin_only_allows_admin _______________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_admin_only_allows_admin>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+______________________________________________________ ERROR at setup of test_user_default_role_is_user ______________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_user_default_role_is_user>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_______________________________________________________ ERROR at setup of test_user_role_can_be_admin ________________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_user_role_can_be_admin>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+_________________________________________________ ERROR at setup of test_user_str_includes_username_and_role _________________________________________________
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>
+sql = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='sqlite' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7daf3855b8c0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_marker' for <Function test_user_str_includes_username_and_role>>
+
+    @pytest.fixture(autouse=True)
+    def _django_db_marker(request: pytest.FixtureRequest) -> None:
+        """Implement the django_db marker, internal to pytest-django."""
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+>           request.getfixturevalue("_django_db_helper")
+
+.venv/lib/python3.12/site-packages/pytest_django/plugin.py:552:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:198: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:221: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:78: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:458: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/base.py:106: in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:356: in handle
+    post_migrate_state = executor.migrate(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:135: in migrate
+    state = self._migrate_all_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:167: in _migrate_all_forwards
+    state = self.apply_migration(
+.venv/lib/python3.12/site-packages/django/db/migrations/executor.py:252: in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/migrations/migration.py:132: in apply
+    operation.database_forwards(
+.venv/lib/python3.12/site-packages/django/db/migrations/operations/fields.py:108: in database_forwards
+    schema_editor.add_field(
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py:402: in add_field
+    super().add_field(model, field)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:713: in add_field
+    self.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:201: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:67: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:80: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:84: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:89: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.db.backends.sqlite3.base.SQLiteCursorWrapper object at 0x7daf389ba840>
+query = 'ALTER TABLE "integrations_webhookevent" ADD COLUMN "fingerprint" varchar(64) NULL', params = []
+
+    def execute(self, query, params=None):
+        if params is None:
+            return super().execute(query)
+        # Extract names if params is a mapping, i.e. "pyformat" style is used.
+        param_names = list(params) if isinstance(params, Mapping) else None
+        query = self.convert_query(query, param_names=param_names)
+>       return super().execute(query, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       django.db.utils.OperationalError: no such table: integrations_webhookevent
+
+.venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py:328: OperationalError
+================================================================== short test summary info ===================================================================
+ERROR apps/integrations/tests/test_integration_ping_api.py::test_integration_ping_api_success - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_receive_mocked.py::test_webhook_receive_creates_event_and_enqueues_task - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_receive_validation.py::test_webhook_missing_signature_returns_400 - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_receive_validation.py::test_webhook_invalid_json_returns_400 - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_receive_validation.py::test_webhook_non_object_json_returns_400 - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_receive_validation.py::test_webhook_payload_too_large_returns_413 - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/integrations/tests/test_webhook_replay_protection.py::test_webhook_replay_returns_200_and_does_not_enqueue_twice - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_middleware_integration.py::TestOrganizationMiddleware::test_request_without_org_header_sets_none - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_middleware_integration.py::TestOrganizationMiddleware::test_valid_org_slug_resolves_organization - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_middleware_integration.py::TestOrganizationMiddleware::test_invalid_org_slug_returns_404 - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_models.py::test_organization_str_returns_name - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_models.py::test_membership_default_role_is_member - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_models.py::test_membership_unique_together_user_org - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_models.py::test_membership_str_includes_user_org_and_role - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_org_permissions_integration.py::TestOrganizationPermissions::test_current_requires_org_header - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_org_permissions_integration.py::TestOrganizationPermissions::test_current_rejects_user_not_in_org - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_org_permissions_integration.py::TestOrganizationPermissions::test_current_allows_member - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_org_permissions_integration.py::TestOrganizationPermissions::test_admin_only_forbids_non_admin_member - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/organizations/tests/test_org_permissions_integration.py::TestOrganizationPermissions::test_admin_only_allows_org_admin - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_token_obtain_pair_returns_tokens_and_custom_claims - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_me_requires_auth - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_me_returns_user_payload_when_authenticated - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_admin_only_requires_auth - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_admin_only_forbids_non_admin - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_api_auth_and_rbac.py::TestAuthAndRBAC::test_admin_only_allows_admin - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_models.py::test_user_default_role_is_user - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_models.py::test_user_role_can_be_admin - django.db.utils.OperationalError: no such table: integrations_webhookevent
+ERROR apps/users/tests/test_models.py::test_user_str_includes_username_and_role - django.db.utils.OperationalError: no such table: integrations_webhookevent
+2 passed, 28 errors in 4.97s

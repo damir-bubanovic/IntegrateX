@@ -1,4 +1,8 @@
+import uuid
+
 from django.db import models
+from django.utils import timezone
+
 from apps.organizations.models import Organization
 
 
@@ -26,11 +30,6 @@ class Integration(models.Model):
         return f"{str(self.organization)}:{self.provider}:{self.name}"
 
 
-
-
-import uuid
-from django.utils import timezone
-
 class WebhookEvent(models.Model):
     class Status(models.TextChoices):
         RECEIVED = "received", "Received"
@@ -45,6 +44,9 @@ class WebhookEvent(models.Model):
         on_delete=models.CASCADE,
         related_name="webhook_events",
     )
+
+    # Replay protection fingerprint (sha256 hex)
+    fingerprint = models.CharField(max_length=64, db_index=True, default="", blank=True)
 
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.RECEIVED)
 
@@ -61,6 +63,13 @@ class WebhookEvent(models.Model):
     attempts = models.PositiveIntegerField(default=0)
     last_error = models.TextField(blank=True, default="")
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["integration", "fingerprint"],
+                name="uniq_webhook_event_fingerprint",
+            )
+        ]
+
     def __str__(self) -> str:
         return f"{self.integration.id}:{self.id}:{self.status}"
-
