@@ -19,7 +19,8 @@ SIGNATURE_HEADER = "HTTP_X_INTEGRATEX_SIGNATURE"
 class WebhookReceiveView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request, integration_id: int):
+    @staticmethod
+    def post(request, integration_id: int):
         integration = Integration.objects.get(id=integration_id, is_active=True)
 
         raw_body: bytes = request.body or b""
@@ -51,7 +52,8 @@ class WebhookReceiveView(APIView):
 class WebhookEventReplayView(APIView):
     permission_classes = [IsAdminUser]
 
-    def post(self, request, event_id):
+    @staticmethod
+    def post(_request, event_id):
         event = WebhookEvent.objects.get(id=event_id)
         process_webhook_event.delay(str(event.id))
         return Response({"id": str(event.id), "replayed": True}, status=status.HTTP_202_ACCEPTED)
