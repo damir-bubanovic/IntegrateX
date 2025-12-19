@@ -117,15 +117,6 @@ IntegrateX is a production-grade Django backend project designed to demonstrate 
 
 ---
 
-## Optional Enhancements
-- Feature flags
-- Soft deletes
-- Sentry integration
-- Advanced rate limiting
-- Performance monitoring
-
----
-
 ## Purpose of This Project
 IntegrateX is built as a demonstration project to showcase:
 - Senior-level Django architecture

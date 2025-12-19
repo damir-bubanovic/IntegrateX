@@ -1,5 +1,108 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-integratex}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      RUN_MIGRATIONS: "1"
+      RUN_COLLECTSTATIC: "1"
+
+      DJANGO_ALLOWED_HOSTS: "127.0.0.1,localhost"
+      USE_WHITENOISE: "1"
+
+      # Force Postgres in container (do not rely on local defaults)
+      DB_ENGINE: "django.db.backends.postgresql"
+      DB_DATABASE: "${DB_DATABASE:-integratex}"
+      DB_USER: "${DB_USER:-postgres}"
+      DB_PASSWORD: "${DB_PASSWORD:-postgres}"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+
+      # Redis in container
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ..:/app
+      - staticfiles:/app/staticfiles
+    ports:
+      - "8000:8000"
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      RUN_MIGRATIONS: "0"
+      RUN_COLLECTSTATIC: "0"
+      USE_WHITENOISE: "1"
+
+      DB_ENGINE: "django.db.backends.postgresql"
+      DB_DATABASE: "${DB_DATABASE:-integratex}"
+      DB_USER: "${DB_USER:-postgres}"
+      DB_PASSWORD: "${DB_PASSWORD:-postgres}"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ..:/app
+    command: celery -A config worker -l info
+
+  beat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      RUN_MIGRATIONS: "0"
+      RUN_COLLECTSTATIC: "0"
+      USE_WHITENOISE: "1"
+
+      DB_ENGINE: "django.db.backends.postgresql"
+      DB_DATABASE: "${DB_DATABASE:-integratex}"
+      DB_USER: "${DB_USER:-postgres}"
+      DB_PASSWORD: "${DB_PASSWORD:-postgres}"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ..:/app
+    command: celery -A config beat -l info
+
+volumes:
+  postgres_data:
+  staticfiles:

@@ -56,6 +56,10 @@ TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 USE_I18N = True
 USE_TZ = True
 
+# Static serving strategy
+# Default: enabled everywhere (override with USE_WHITENOISE=0)
+USE_WHITENOISE = _env_bool("USE_WHITENOISE", default=True)
+
 # Apps
 INSTALLED_APPS = [
     # Django
@@ -110,6 +114,13 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+]
+
+if USE_WHITENOISE:
+    # Serve static files (works for local gunicorn and for containers)
+    MIDDLEWARE.append("whitenoise.middleware.WhiteNoiseMiddleware")
+
+MIDDLEWARE += [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -154,8 +165,15 @@ TEMPLATES = [
 ]
 
 # Static
-STATIC_URL = "static/"
-STATIC_ROOT = os.getenv("STATIC_ROOT", "staticfiles")
+STATIC_URL = "/static/"
+STATIC_ROOT = os.getenv("STATIC_ROOT", str(BASE_DIR / "staticfiles"))
+
+if USE_WHITENOISE:
+    # WhiteNoise static storage (hashed + compressed)
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    }
 
 # Database
 # Default remains sqlite3 with db.sqlite3 in project root.
